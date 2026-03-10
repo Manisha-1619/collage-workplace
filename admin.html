@@ -1,0 +1,1568 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4 px-4">
+    <!-- Header with Cyber Glitch -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="admin-header">
+                <div class="header-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <div class="icon-ring"></div>
+                </div>
+                <div>
+                    <h1 class="glitch-text" data-text="ADMIN DASHBOARD">ADMIN DASHBOARD</h1>
+                    <p class="text-secondary">
+                        <i class="bi bi-circle-fill text-success me-2" style="font-size: 8px;"></i>
+                        System monitoring • User management • Global scan logs
+                    </p>
+                </div>
+                <div class="header-badge">
+                    <span class="live-badge">
+                        <span class="pulse-dot"></span>
+                        LIVE
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Stats Cards -->
+    <div class="stats-grid mb-5">
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Total Users</span>
+                <span class="stat-value count-up" data-target="{{ total_users }}">0</span>
+            </div>
+            <div class="stat-footer">
+                <i class="bi bi-arrow-up text-success"></i> +12% this month
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-icon">
+                <i class="bi bi-search-heart"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Global Scans</span>
+                <span class="stat-value count-up" data-target="{{ total_scans }}">0</span>
+            </div>
+            <div class="stat-footer">
+                <i class="bi bi-arrow-up text-success"></i> +8% today
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Active Threats</span>
+                <span class="stat-value text-danger count-up" data-target="{{ threat_count }}">0</span>
+            </div>
+            <div class="stat-footer">
+                <i class="bi bi-arrow-up text-danger"></i> +5% from yesterday
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-icon">
+                <i class="bi bi-hdd-stack-fill"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">System Status</span>
+                <span class="stat-value {% if system_status == 'Healthy' %}text-success{% else %}text-warning{% endif %}">
+                    {{ system_status }}
+                </span>
+            </div>
+            <div class="stat-footer">
+                <i class="bi bi-check-circle-fill text-success"></i> All systems operational
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+    </div>
+
+    <!-- System Health & Quick Actions -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-4">
+            <div class="health-card" data-aos="fade-right">
+                <div class="card-header">
+                    <i class="bi bi-activity"></i>
+                    <h4>System Health</h4>
+                </div>
+                <div class="health-metrics">
+                    <div class="metric">
+                        <span class="metric-label">CPU Usage</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 45%; background: #00ffff;"></div>
+                        </div>
+                        <span class="metric-value">45%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Memory Usage</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 62%; background: #ff00ff;"></div>
+                        </div>
+                        <span class="metric-value">62%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Disk Usage</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 78%; background: #ffff00;"></div>
+                        </div>
+                        <span class="metric-value">78%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Network I/O</span>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: 34%; background: #00ff00;"></div>
+                        </div>
+                        <span class="metric-value">34%</span>
+                    </div>
+                </div>
+                <div class="uptime-display">
+                    <i class="bi bi-clock"></i>
+                    <span>Uptime: 14d 7h 23m</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="quick-actions-card" data-aos="fade-up">
+                <div class="card-header">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    <h4>Quick Actions</h4>
+                </div>
+                <div class="actions-grid">
+                    <button class="action-btn" onclick="exportData()">
+                        <i class="bi bi-download"></i>
+                        <span>Export Logs</span>
+                    </button>
+                    <button class="action-btn" onclick="refreshData()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <span>Refresh</span>
+                    </button>
+                    <button class="action-btn" onclick="clearCache()">
+                        <i class="bi bi-trash"></i>
+                        <span>Clear Cache</span>
+                    </button>
+                    <button class="action-btn" onclick="systemBackup()">
+                        <i class="bi bi-hdd"></i>
+                        <span>Backup</span>
+                    </button>
+                </div>
+                <div class="last-update">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Last updated: 2 minutes ago</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="alerts-card" data-aos="fade-left">
+                <div class="card-header">
+                    <i class="bi bi-bell-fill"></i>
+                    <h4>System Alerts</h4>
+                    <span class="alert-count">3</span>
+                </div>
+                <div class="alerts-list">
+                    <div class="alert-item warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <span>High threat detection rate</span>
+                        <small>5m ago</small>
+                    </div>
+                    <div class="alert-item info">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <span>New user registrations: +24</span>
+                        <small>15m ago</small>
+                    </div>
+                    <div class="alert-item success">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Backup completed</span>
+                        <small>1h ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Management Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="section-header">
+                <div class="header-left">
+                    <i class="bi bi-people-fill"></i>
+                    <h3>User Management</h3>
+                </div>
+                <div class="header-right">
+                    <span class="record-count">Total: {{ users|length }} users</span>
+                    <button class="btn-add" onclick="addUser()">
+                        <i class="bi bi-plus-lg"></i> Add User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="cyber-table-card">
+                <!-- User Search -->
+                <form method="GET" action="{{ url_for('admin_panel') }}" class="table-search">
+                    <input type="hidden" name="scan_search" value="{{ scan_search }}">
+                    <input type="hidden" name="scan_type" value="{{ selected_scan_type }}">
+                    <input type="hidden" name="scan_result" value="{{ selected_scan_result }}">
+                    <div class="search-wrapper">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="user_search" class="search-input" 
+                               placeholder="Search by username or email..." value="{{ user_search }}">
+                        <button type="submit" class="search-btn">Search</button>
+                        {% if user_search %}
+                        <a href="{{ url_for('admin_panel') }}" class="clear-btn">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </form>
+
+                <!-- Users Table -->
+                <div class="table-responsive">
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Scans</th>
+                                <th>Threats</th>
+                                <th>Last Scan</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if users %}
+                            {% for user in users %}
+                            {% set stats = user_stats.get(user.id, {}) %}
+                            <tr data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                                <td><span class="id-badge">#{{ user.id }}</span></td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            <i class="bi bi-person-circle"></i>
+                                        </div>
+                                        <span class="username">{{ user.username }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="role-badge {% if user.is_admin %}admin{% else %}user{% endif %}">
+                                        {{ "Admin" if user.is_admin else "User" }}
+                                    </span>
+                                </td>
+                                <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'N/A' }}</td>
+                                <td><span class="scan-count">{{ stats.get('total_scans', 0) }}</span></td>
+                                <td><span class="threat-count">{{ stats.get('threat_scans', 0) }}</span></td>
+                                <td>{{ stats.get('last_scan_at').strftime('%Y-%m-%d %H:%M') if stats.get('last_scan_at') else 'Never' }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-icon edit" onclick="editUser({{ user.id }})">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="action-icon delete" onclick="deleteUser({{ user.id }})">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center py-4">
+                                    <div class="empty-state">
+                                        <i class="bi bi-people"></i>
+                                        <p>No users matched your search</p>
+                                        <a href="{{ url_for('admin_panel') }}" class="reset-link">Clear filters</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if users %}
+                <div class="table-footer">
+                    <span class="showing-info">Showing 1-{{ users|length }} of {{ total_users }} users</span>
+                    <div class="pagination">
+                        <button class="page-btn" disabled><i class="bi bi-chevron-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">...</button>
+                        <button class="page-btn">10</button>
+                        <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Scan Activity Section (Now Below) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="section-header">
+                <div class="header-left">
+                    <i class="bi bi-activity"></i>
+                    <h3>Global Scan Activity</h3>
+                </div>
+                <div class="header-right">
+                    <span class="record-count">Total: {{ scans|length }} scans</span>
+                    <span class="live-indicator">
+                        <span class="pulse-dot"></span> LIVE
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="cyber-table-card">
+                <!-- Scan Filters -->
+                <form method="GET" action="{{ url_for('admin_panel') }}" class="filters-grid">
+                    <input type="hidden" name="user_search" value="{{ user_search }}">
+                    
+                    <div class="filter-group">
+                        <label>Search Target</label>
+                        <div class="filter-input">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="scan_search" placeholder="URL, IP, Hash..." value="{{ scan_search }}">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Scan Type</label>
+                        <select name="scan_type" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="url" {% if selected_scan_type == 'url' %}selected{% endif %}>URL</option>
+                            <option value="ip" {% if selected_scan_type == 'ip' %}selected{% endif %}>IP</option>
+                            <option value="file" {% if selected_scan_type == 'file' %}selected{% endif %}>File</option>
+                            <option value="hash" {% if selected_scan_type == 'hash' %}selected{% endif %}>Hash</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Result</label>
+                        <select name="scan_result" class="filter-select">
+                            <option value="">All Results</option>
+                            <option value="phishing" {% if selected_scan_result == 'phishing' %}selected{% endif %}>Phishing</option>
+                            <option value="safe" {% if selected_scan_result == 'safe' %}selected{% endif %}>Safe</option>
+                            <option value="unknown" {% if selected_scan_result == 'unknown' %}selected{% endif %}>Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="filter-btn">Apply Filters</button>
+                    </div>
+
+                    {% if scan_search or selected_scan_type or selected_scan_result %}
+                    <div class="filter-group">
+                        <label>&nbsp;</label>
+                        <a href="{{ url_for('admin_panel') }}" class="clear-filters">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                    {% endif %}
+                </form>
+
+                <!-- Scans Table -->
+                <div class="table-responsive">
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Target</th>
+                                <th>Result</th>
+                                <th>Risk Score</th>
+                                <th>User</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if scans %}
+                            {% for scan in scans %}
+                            <tr data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                                <td>
+                                    <div class="time-cell">
+                                        <span class="date">{{ scan.scanned_at.strftime('%Y-%m-%d') if scan.scanned_at else 'N/A' }}</span>
+                                        <span class="time">{{ scan.scanned_at.strftime('%H:%M') if scan.scanned_at else '' }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="scan-type-badge {{ scan.scan_type }}">
+                                        <i class="bi bi-{{ 'link-45deg' if scan.scan_type == 'url' else 'globe' if scan.scan_type == 'ip' else 'file-earmark-code' if scan.scan_type == 'file' else 'hash' }}"></i>
+                                        {{ scan.scan_type.upper() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="target-cell" title="{{ scan.input_value }}">
+                                        <span class="target-value">{{ scan.input_value|truncate(30) }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% set result_class = 'danger' if scan.result == 'phishing' else 'success' if scan.result == 'safe' else 'secondary' %}
+                                    {% set result_icon = 'exclamation-triangle-fill' if scan.result == 'phishing' else 'check-circle-fill' if scan.result == 'safe' else 'question-circle-fill' %}
+                                    <span class="result-badge {{ result_class }}">
+                                        <i class="bi bi-{{ result_icon }}"></i>
+                                        {{ scan.result|upper }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="risk-cell">
+                                        <div class="risk-bar">
+                                            <div class="risk-fill" style="width: {{ (scan.risk_score * 100)|round|int if scan.risk_score is not none else 0 }}%; background: {% if scan.risk_score > 0.7 %}#ff00ff{% elif scan.risk_score > 0.4 %}#ffff00{% else %}#00ff00{% endif %};"></div>
+                                        </div>
+                                        <span class="risk-value">{{ (scan.risk_score * 100)|round(1) if scan.risk_score is not none else 0 }}%</span>
+                                    </div>
+                                </td>
+                                <td>{{ scan.user.username if scan.user else 'N/A' }}</td>
+                                <td>
+                                    <button class="view-details" onclick="viewScan({{ scan.id }})">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <div class="empty-state">
+                                        <i class="bi bi-activity"></i>
+                                        <p>No scans matched your filters</p>
+                                        <a href="{{ url_for('admin_panel') }}" class="reset-link">Clear all filters</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Scan Stats -->
+                {% if scans %}
+                <div class="scan-stats">
+                    <div class="stat-chip">
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        <span>Safe: {{ scans|selectattr('result', 'equalto', 'safe')|list|length }}</span>
+                    </div>
+                    <div class="stat-chip">
+                        <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                        <span>Threats: {{ scans|selectattr('result', 'equalto', 'phishing')|list|length }}</span>
+                    </div>
+                    <div class="stat-chip">
+                        <i class="bi bi-question-circle-fill text-warning"></i>
+                        <span>Unknown: {{ scans|selectattr('result', 'equalto', 'unknown')|list|length }}</span>
+                    </div>
+                    <div class="stat-chip">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Avg Risk: 34%</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== ADMIN DASHBOARD CYBER STYLES ===== */
+
+/* Admin Header */
+.admin-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: rgba(20, 25, 35, 0.8);
+    border: 1px solid #00ffff;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
+    50% { box-shadow: 0 0 60px rgba(255, 0, 255, 0.3); }
+}
+
+.header-icon {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon i {
+    font-size: 2.5rem;
+    color: #00ffff;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.icon-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00ffff;
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.glitch-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    animation: glitchSkew 4s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    color: #ff00ff;
+    z-index: -1;
+    animation: glitchOffset 0.3s infinite;
+}
+
+.glitch-text::after {
+    color: #00ffff;
+    z-index: -2;
+    animation: glitchOffset 0.3s infinite reverse;
+}
+
+@keyframes glitchSkew {
+    0%, 100% { transform: skew(0deg); }
+    92% { transform: skew(2deg); }
+    94% { transform: skew(-2deg); }
+    96% { transform: skew(1deg); }
+    98% { transform: skew(-1deg); }
+}
+
+@keyframes glitchOffset {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(2px, 2px); }
+    100% { transform: translate(0); }
+}
+
+.header-badge {
+    margin-left: auto;
+}
+
+.live-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    font-size: 0.9rem;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #ff0000;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-card {
+    position: relative;
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #00ffff;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+}
+
+.stat-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.5rem;
+    color: rgba(0, 255, 255, 0.2);
+    transition: all 0.3s;
+}
+
+.stat-card:hover .stat-icon {
+    color: rgba(0, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.stat-content {
+    position: relative;
+    z-index: 2;
+}
+
+.stat-label {
+    display: block;
+    color: #888;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+
+.stat-footer {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.stat-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.stat-card:hover .stat-glow {
+    opacity: 1;
+}
+
+/* Health Card */
+.health-card,
+.quick-actions-card,
+.alerts-card {
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    height: 100%;
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-header i {
+    color: #00ffff;
+    font-size: 1.5rem;
+}
+
+.card-header h4 {
+    color: #fff;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Health Metrics */
+.health-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.metric-label {
+    width: 80px;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.metric-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.metric-fill {
+    height: 100%;
+    animation: fillWidth 1s ease-out;
+}
+
+@keyframes fillWidth {
+    from { width: 0; }
+}
+
+.metric-value {
+    width: 40px;
+    color: #00ffff;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.uptime-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+}
+
+/* Quick Actions */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    border-color: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.action-btn i {
+    font-size: 1.5rem;
+}
+
+.action-btn span {
+    font-size: 0.8rem;
+}
+
+.last-update {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Alerts Card */
+.alert-count {
+    margin-left: auto;
+    padding: 0.2rem 0.5rem;
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    font-size: 0.8rem;
+    border-radius: 50%;
+}
+
+.alerts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid;
+}
+
+.alert-item.warning {
+    border-color: #ff00ff;
+}
+
+.alert-item.info {
+    border-color: #00ffff;
+}
+
+.alert-item.success {
+    border-color: #00ff00;
+}
+
+.alert-item i {
+    font-size: 1rem;
+}
+
+.alert-item.warning i {
+    color: #ff00ff;
+}
+
+.alert-item.info i {
+    color: #00ffff;
+}
+
+.alert-item.success i {
+    color: #00ff00;
+}
+
+.alert-item span {
+    flex: 1;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.alert-item small {
+    color: #888;
+    font-size: 0.7rem;
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.header-left i {
+    color: #00ffff;
+    font-size: 1.5rem;
+}
+
+.header-left h3 {
+    color: #fff;
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.record-count {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.btn-add {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-add:hover {
+    background: #00ffff;
+    color: #0a0c0f;
+}
+
+/* Cyber Table Card */
+.cyber-table-card {
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    overflow-x: auto;
+}
+
+/* Search */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-wrapper i {
+    color: #00ffff;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #00ffff;
+}
+
+.search-btn {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #00ffff, #00ccff);
+    border: none;
+    color: #0a0c0f;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.search-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.clear-btn {
+    padding: 0.8rem;
+    background: rgba(255, 0, 255, 0.1);
+    border: 1px solid #ff00ff;
+    color: #ff00ff;
+    text-decoration: none;
+}
+
+.clear-btn:hover {
+    background: #ff00ff;
+    color: #0a0c0f;
+}
+
+/* Cyber Table */
+.cyber-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cyber-table th {
+    text-align: left;
+    padding: 1rem 0.5rem;
+    border-bottom: 2px solid #00ffff;
+    color: #00ffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+}
+
+.cyber-table td {
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    color: #e0e0e0;
+}
+
+.cyber-table tr:hover td {
+    background: rgba(0, 255, 255, 0.05);
+}
+
+/* Table Elements */
+.id-badge {
+    color: #00ffff;
+    font-family: 'Courier New', monospace;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    border-radius: 50%;
+    color: #00ffff;
+}
+
+.username {
+    font-weight: 600;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 0.2rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.role-badge.admin {
+    background: rgba(0, 255, 255, 0.2);
+    border: 1px solid #00ffff;
+    color: #00ffff;
+}
+
+.role-badge.user {
+    background: rgba(128, 128, 128, 0.2);
+    border: 1px solid #888;
+    color: #888;
+}
+
+.scan-count,
+.threat-count {
+    font-family: 'Courier New', monospace;
+}
+
+.threat-count {
+    color: #ff00ff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.action-icon {
+    padding: 0.3rem;
+    background: transparent;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-icon.edit {
+    border-color: #00ffff;
+    color: #00ffff;
+}
+
+.action-icon.edit:hover {
+    background: #00ffff;
+    color: #0a0c0f;
+}
+
+.action-icon.delete {
+    border-color: #ff00ff;
+    color: #ff00ff;
+}
+
+.action-icon.delete:hover {
+    background: #ff00ff;
+    color: #0a0c0f;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: rgba(0, 255, 255, 0.3);
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.reset-link {
+    color: #00ffff;
+    text-decoration: none;
+    border-bottom: 1px dashed #00ffff;
+}
+
+.reset-link:hover {
+    color: #ff00ff;
+    border-color: #ff00ff;
+}
+
+/* Table Footer */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.showing-info {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.page-btn {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: rgba(0, 255, 255, 0.2);
+    border-color: #00ffff;
+}
+
+.page-btn.active {
+    background: rgba(0, 255, 255, 0.3);
+    border-color: #00ffff;
+    color: #00ffff;
+}
+
+.page-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Filters Grid */
+.filters-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto auto;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filter-group label {
+    color: #00ffff;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.filter-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.filter-input i {
+    color: #00ffff;
+}
+
+.filter-input input {
+    flex: 1;
+    padding: 0.5rem 0;
+    background: transparent;
+    border: none;
+    color: #fff;
+}
+
+.filter-input input:focus {
+    outline: none;
+}
+
+.filter-select {
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+}
+
+.filter-select option {
+    background: #1a1f35;
+}
+
+.filter-btn {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #00ffff, #00ccff);
+    border: none;
+    color: #0a0c0f;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.clear-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.8rem;
+    color: #ff00ff;
+    text-decoration: none;
+    border: 1px solid #ff00ff;
+    white-space: nowrap;
+}
+
+.clear-filters:hover {
+    background: #ff00ff;
+    color: #0a0c0f;
+}
+
+/* Scan Elements */
+.time-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-cell .date {
+    color: #00ffff;
+    font-size: 0.8rem;
+}
+
+.time-cell .time {
+    color: #888;
+    font-size: 0.7rem;
+}
+
+.scan-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid;
+}
+
+.scan-type-badge.url {
+    border-color: #00ffff;
+    color: #00ffff;
+}
+
+.scan-type-badge.ip {
+    border-color: #ff00ff;
+    color: #ff00ff;
+}
+
+.scan-type-badge.file {
+    border-color: #ffff00;
+    color: #ffff00;
+}
+
+.scan-type-badge.hash {
+    border-color: #00ff00;
+    color: #00ff00;
+}
+
+.target-cell {
+    max-width: 150px;
+}
+
+.target-value {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid;
+}
+
+.result-badge.danger {
+    border-color: #ff00ff;
+    color: #ff00ff;
+}
+
+.result-badge.success {
+    border-color: #00ff00;
+    color: #00ff00;
+}
+
+.result-badge.secondary {
+    border-color: #888;
+    color: #888;
+}
+
+.risk-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.risk-bar {
+    width: 60px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.risk-fill {
+    height: 100%;
+}
+
+.risk-value {
+    color: #00ffff;
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+}
+
+.view-details {
+    padding: 0.3rem 0.5rem;
+    background: transparent;
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.view-details:hover {
+    background: #00ffff;
+    color: #0a0c0f;
+}
+
+/* Scan Stats */
+.scan-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .header-badge {
+        margin-left: 0;
+    }
+    
+    .glitch-text {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .table-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .scan-stats {
+        flex-wrap: wrap;
+    }
+}
+</style>
+
+<!-- AOS Animation Script -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script>
+// Initialize AOS
+AOS.init({
+    duration: 600,
+    once: true
+});
+
+// Counter Animation
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.count-up');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        let current = 0;
+        const increment = target / 50;
+        
+        const updateCounter = () => {
+            current += increment;
+            if(current < target) {
+                counter.innerText = Math.ceil(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.innerText = target.toLocaleString();
+            }
+        };
+        
+        // Start counter when element is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    updateCounter();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(counter);
+    });
+});
+
+// Quick Action Functions
+function exportData() {
+    // Simulate export
+    alert('Exporting system logs...');
+}
+
+function refreshData() {
+    location.reload();
+}
+
+function clearCache() {
+    if(confirm('Clear system cache?')) {
+        alert('Cache cleared successfully');
+    }
+}
+
+function systemBackup() {
+    alert('Creating system backup...');
+}
+
+function addUser() {
+    alert('Add user functionality');
+}
+
+function editUser(id) {
+    alert('Edit user: ' + id);
+}
+
+function deleteUser(id) {
+    if(confirm('Delete user ' + id + '?')) {
+        alert('User deleted');
+    }
+}
+
+function viewScan(id) {
+    alert('View scan details: ' + id);
+}
+</script>
+{% endblock %}

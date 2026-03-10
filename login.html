@@ -1,0 +1,694 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <!-- Animated Cyber Card -->
+            <div class="cyber-login-card animate-fade-in">
+                <!-- Scanning Line Animation -->
+                <div class="card-scan-line"></div>
+                
+                <!-- Floating Particles -->
+                <div class="card-particles">
+                    <span class="particle p1"></span>
+                    <span class="particle p2"></span>
+                    <span class="particle p3"></span>
+                    <span class="particle p4"></span>
+                    <span class="particle p5"></span>
+                    <span class="particle p6"></span>
+                </div>
+
+                <!-- Cyber Corner Decorations -->
+                <div class="corner top-left"></div>
+                <div class="corner top-right"></div>
+                <div class="corner bottom-left"></div>
+                <div class="corner bottom-right"></div>
+
+                <!-- Header with Glitch Effect -->
+                <div class="login-header">
+                    <div class="shield-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <div class="shield-ring"></div>
+                    </div>
+                    <h2 class="glitch-text" data-text="Sign In">Sign In</h2>
+                    <p class="text-secondary">Access your cyber security dashboard</p>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST" action="{{ url_for('login') }}" class="cyber-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
+                    <!-- Username Field -->
+                    <div class="form-group mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Username</span>
+                        </label>
+                        <div class="input-cyber">
+                            <input type="text" class="cyber-input" id="username"
+                                name="username" required placeholder="Enter your username">
+                            <span class="input-border"></span>
+                            <span class="input-glow"></span>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-key-fill"></i>
+                            <span>Password</span>
+                        </label>
+                        <div class="input-cyber">
+                            <input type="password" class="cyber-input" id="password"
+                                name="password" required placeholder="Enter your password">
+                            <span class="input-border"></span>
+                            <span class="input-glow"></span>
+                        </div>
+                    </div>
+
+                    <!-- Login Button with Animation -->
+                    <button type="submit" class="cyber-login-btn" id="loginBtn">
+                        <span class="btn-text">Login</span>
+                        <span class="btn-glitch"></span>
+                        <span class="btn-scan"></span>
+                        <span class="btn-particles">
+                            <span class="bp1"></span>
+                            <span class="bp2"></span>
+                            <span class="bp3"></span>
+                        </span>
+                    </button>
+
+                    <!-- Sign Up Link -->
+                    <p class="text-center signup-text">
+                        <span class="text-secondary">Don't have an account?</span>
+                        <a href="{{ url_for('register') }}" class="cyber-link">
+                            Sign Up <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </p>
+                </form>
+
+                <!-- Security Badge -->
+                <div class="security-badge">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Secure Login • 256-bit Encryption</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== LOGIN PAGE CYBER ANIMATIONS ===== */
+
+/* Main Card */
+.cyber-login-card {
+    position: relative;
+    background: rgba(10, 15, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid #00ffff;
+    padding: 3rem;
+    overflow: hidden;
+    animation: cardAppear 0.8s ease-out, cardFloat 6s ease-in-out infinite;
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Scanning Line Animation */
+.card-scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        #00ffff, 
+        #ff00ff, 
+        #00ffff, 
+        transparent);
+    animation: scanMove 4s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes scanMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Floating Particles */
+.card-particles .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ffff;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0;
+    animation: particleFloat 4s ease-out infinite;
+}
+
+.p1 { top: 20%; left: 10%; animation-delay: 0s; }
+.p2 { top: 60%; right: 15%; animation-delay: 1s; }
+.p3 { bottom: 30%; left: 20%; animation-delay: 2s; }
+.p4 { bottom: 50%; right: 25%; animation-delay: 3s; }
+.p5 { top: 40%; left: 30%; animation-delay: 1.5s; }
+.p6 { bottom: 20%; right: 35%; animation-delay: 2.5s; }
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+        box-shadow: 0 0 10px #00ffff;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x, 50px), var(--y, -50px)) scale(0);
+        opacity: 0;
+    }
+}
+
+.p1 { --x: 30px; --y: -30px; }
+.p2 { --x: -30px; --y: -40px; }
+.p3 { --x: 40px; --y: 30px; }
+.p4 { --x: -40px; --y: 40px; }
+.p5 { --x: 50px; --y: -20px; }
+.p6 { --x: -20px; --y: 50px; }
+
+/* Cyber Corners */
+.corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #00ffff;
+    animation: cornerPulse 2s ease-in-out infinite;
+}
+
+.corner.top-left {
+    top: 10px;
+    left: 10px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.corner.top-right {
+    top: 10px;
+    right: 10px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.corner.bottom-left {
+    bottom: 10px;
+    left: 10px;
+    border-right: none;
+    border-top: none;
+}
+
+.corner.bottom-right {
+    bottom: 10px;
+    right: 10px;
+    border-left: none;
+    border-top: none;
+}
+
+@keyframes cornerPulse {
+    0%, 100% { 
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+        border-color: #00ffff;
+    }
+    50% { 
+        width: 40px;
+        height: 40px;
+        opacity: 0.5;
+        border-color: #ff00ff;
+    }
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.shield-icon {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shield-icon i {
+    font-size: 3rem;
+    color: #00ffff;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    animation: shieldPulse 2s ease-in-out infinite;
+    z-index: 2;
+}
+
+.shield-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00ffff;
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes shieldPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Glitch Text */
+.glitch-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    animation: glitchSkew 4s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    color: #ff00ff;
+    z-index: -1;
+    animation: glitchOffset 0.3s infinite;
+}
+
+.glitch-text::after {
+    color: #00ffff;
+    z-index: -2;
+    animation: glitchOffset 0.3s infinite reverse;
+}
+
+@keyframes glitchSkew {
+    0%, 100% { transform: skew(0deg); }
+    92% { transform: skew(2deg); }
+    94% { transform: skew(-2deg); }
+    96% { transform: skew(1deg); }
+    98% { transform: skew(-1deg); }
+}
+
+@keyframes glitchOffset {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* Form Labels */
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-label i {
+    font-size: 1rem;
+    animation: labelIcon 3s ease-in-out infinite;
+}
+
+@keyframes labelIcon {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+/* Cyber Input */
+.input-cyber {
+    position: relative;
+    width: 100%;
+}
+
+.cyber-input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #00ffff;
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s;
+}
+
+.cyber-input:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.input-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00ffff;
+    pointer-events: none;
+    transition: all 0.3s;
+    animation: borderPulse 3s infinite;
+}
+
+@keyframes borderPulse {
+    0%, 100% { border-color: #00ffff; box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+    50% { border-color: #ff00ff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.5); }
+}
+
+.input-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(0, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s;
+    pointer-events: none;
+}
+
+.input-cyber:hover .input-glow {
+    left: 100%;
+}
+
+.cyber-input:focus + .input-border {
+    border-color: #ff00ff;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+}
+
+/* Login Button */
+.cyber-login-btn {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #00ffff, #00ccff);
+    border: none;
+    color: #0a0c0f;
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1rem;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s;
+    margin: 2rem 0 1rem;
+    animation: btnPulse 2s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.btn-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    transform: translateX(-100%);
+    animation: btnGlitch 3s infinite;
+}
+
+@keyframes btnGlitch {
+    0%, 100% { transform: translateX(-100%); }
+    92% { transform: translateX(100%); }
+    94% { transform: translateX(-100%); }
+    96% { transform: translateX(50%); }
+    98% { transform: translateX(-50%); }
+}
+
+.btn-scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        #fff, 
+        transparent);
+    animation: btnScan 2s linear infinite;
+}
+
+@keyframes btnScan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.btn-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.btn-particles span {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: btnParticles 2s ease-out infinite;
+}
+
+.bp1 { top: 20%; left: 10%; animation-delay: 0s; }
+.bp2 { top: 50%; left: 50%; animation-delay: 0.5s; }
+.bp3 { top: 80%; left: 80%; animation-delay: 1s; }
+
+@keyframes btnParticles {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x, 50px), var(--y, -50px)) scale(0);
+        opacity: 0;
+    }
+}
+
+.bp1 { --x: 30px; --y: -30px; }
+.bp2 { --x: -30px; --y: 30px; }
+.bp3 { --x: 30px; --y: 30px; }
+
+.cyber-login-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+.cyber-login-btn:active {
+    transform: scale(0.95);
+}
+
+/* Cyber Link */
+.cyber-link {
+    color: #00ffff;
+    text-decoration: none;
+    position: relative;
+    margin-left: 0.5rem;
+    transition: all 0.3s;
+}
+
+.cyber-link i {
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.cyber-link:hover {
+    color: #ff00ff;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+.cyber-link:hover i {
+    transform: translateX(5px);
+}
+
+/* Security Badge */
+.security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.security-badge i {
+    color: #00ff00;
+    animation: badgeGlow 2s ease-in-out infinite;
+}
+
+@keyframes badgeGlow {
+    0%, 100% { filter: drop-shadow(0 0 5px #00ff00); }
+    50% { filter: drop-shadow(0 0 15px #00ff00); }
+}
+
+/* Sign Up Text */
+.signup-text {
+    margin-top: 1.5rem;
+}
+
+/* Loading State for Button */
+.cyber-login-btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.cyber-login-btn.loading .btn-text::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-login-card {
+        padding: 2rem;
+    }
+    
+    .glitch-text {
+        font-size: 2rem;
+    }
+    
+    .particle {
+        display: none;
+    }
+}
+</style>
+
+<!-- JavaScript for Button Animation -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('loginBtn');
+    const form = document.querySelector('.cyber-form');
+    
+    if(loginBtn) {
+        // Mouse move parallax effect
+        loginBtn.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const moveX = (x - centerX) / 15;
+            const moveY = (y - centerY) / 15;
+            
+            this.style.transform = `perspective(500px) rotateX(${moveY}deg) rotateY(${moveX}deg) scale(1.05)`;
+        });
+        
+        loginBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'perspective(500px) rotateX(0) rotateY(0) scale(1)';
+        });
+        
+        // Click animation
+        form.addEventListener('submit', function(e) {
+            if(!form.checkValidity()) return;
+            
+            loginBtn.classList.add('loading');
+            loginBtn.querySelector('.btn-text').textContent = 'Authenticating';
+            
+            // Ripple effect
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple-effect';
+            ripple.style.position = 'absolute';
+            ripple.style.width = '10px';
+            ripple.style.height = '10px';
+            ripple.style.background = 'rgba(255, 255, 255, 0.7)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'ripple 1s ease-out';
+            loginBtn.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        });
+    }
+});
+
+// Add ripple animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(20);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

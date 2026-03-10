@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLink Checker | Phishing Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* ===== PORT SCANNER STYLE ANIMATIONS ===== */
+        
+        /* Cyber Grid Background */
+        body {
+            position: relative;
+            background: #0a0c0f;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridShift 8s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        /* Scanning Line Animation */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .scan-line::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: scanMove 8s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Floating Cyber Orbs */
+        .cyber-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: screen;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 255, 255, 0.1);
+            top: -100px;
+            right: -100px;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 0, 255, 0.08);
+            bottom: -200px;
+            left: -200px;
+            animation: orbFloat 25s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 0, 0.05);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 50px) scale(0.9); }
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+        }
+
+        /* Digital Rain */
+        .digital-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Navbar Cyber Style */
+        .navbar {
+            background: rgba(10, 12, 15, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ffff;
+            animation: navPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        @keyframes navPulse {
+            0%, 100% { 
+                border-bottom-color: #00ffff;
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            }
+            50% { 
+                border-bottom-color: #ff00ff;
+                box-shadow: 0 0 50px rgba(255, 0, 255, 0.3);
+            }
+        }
+
+        .navbar-brand {
+            position: relative;
+            color: #00ffff !important;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            animation: glitchText 4s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { 
+                text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+                transform: skew(0deg);
+            }
+            92% { 
+                text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff;
+                transform: skew(2deg);
+            }
+            94% { 
+                text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+                transform: skew(-2deg);
+            }
+            96% { 
+                text-shadow: -2px 0 #ffff00, 2px 0 #00ffff;
+                transform: skew(1deg);
+            }
+            98% { 
+                text-shadow: 2px 0 #ffff00, -2px 0 #ff00ff;
+                transform: skew(-1deg);
+            }
+        }
+
+        .navbar-brand i {
+            color: #ff00ff !important;
+            animation: spin 10s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .nav-link {
+            color: #e0e0e0 !important;
+            position: relative;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #00ffff !important;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Cyber Button Style */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: transparent !important;
+            border-color: #00ffff !important;
+            color: #00ffff !important;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #00ffff !important;
+            color: #0a0c0f !important;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Alert Cyber Style */
+        .alert {
+            border: none !important;
+            border-left: 4px solid !important;
+            background: rgba(10, 12, 15, 0.9) !important;
+            backdrop-filter: blur(10px);
+            color: #e0e0e0 !important;
+            animation: alertSlide 0.5s ease-out, alertGlow 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes alertSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes alertGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 255, 0.3); }
+        }
+
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ffff, #ff00ff, #00ffff, transparent);
+            animation: scanLine 2s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .alert-success {
+            border-left-color: #00ff00 !important;
+        }
+
+        .alert-danger {
+            border-left-color: #ff00ff !important;
+        }
+
+        .alert-info {
+            border-left-color: #00ffff !important;
+        }
+
+        .btn-close {
+            filter: invert(1) brightness(2);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        /* Main Content Animation */
+        main {
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Cyber Style */
+        .card {
+            background: rgba(20, 25, 35, 0.9) !important;
+            border: 1px solid rgba(0, 255, 255, 0.3) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid #00ffff;
+            border-left: 2px solid #00ffff;
+            animation: cornerPulse 2s infinite;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid #00ffff;
+            border-right: 2px solid #00ffff;
+            animation: cornerPulse 2s infinite reverse;
+        }
+
+        @keyframes cornerPulse {
+            0%, 100% { 
+                width: 20px; 
+                height: 20px; 
+                opacity: 1;
+            }
+            50% { 
+                width: 35px; 
+                height: 35px; 
+                opacity: 0.5;
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #00ffff !important;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+        }
+
+        .card-header {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3) !important;
+        }
+
+        /* Table Cyber Style */
+        .table {
+            color: #e0e0e0 !important;
+            border-color: rgba(0, 255, 255, 0.2) !important;
+        }
+
+        .table thead th {
+            color: #00ffff !important;
+            border-bottom: 2px solid #00ffff !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .table tbody tr {
+            animation: rowFade 0.3s ease-out forwards;
+            opacity: 0;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        @keyframes rowFade {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .table tbody tr:hover {
+            background: rgba(0, 255, 255, 0.1) !important;
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Badge Cyber Style */
+        .badge {
+            padding: 0.5em 1em !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600 !important;
+            border: 1px solid;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .badge.bg-primary {
+            background: transparent !important;
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .badge.bg-success {
+            background: transparent !important;
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        .badge.bg-danger {
+            background: transparent !important;
+            border-color: #ff00ff;
+            color: #ff00ff;
+        }
+
+        .badge.bg-warning {
+            background: transparent !important;
+            border-color: #ffff00;
+            color: #ffff00;
+        }
+
+        .badge.bg-info {
+            background: transparent !important;
+            border-color: #0dcaf0;
+            color: #0dcaf0;
+        }
+
+        /* Progress Bar Cyber Style */
+        .progress {
+            background: rgba(0, 0, 0, 0.5) !important;
+            border: 1px solid #00ffff;
+            height: 20px !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #00ffff) !important;
+            background-size: 200% 100% !important;
+            animation: gradientMove 2s linear infinite;
+            position: relative;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: progressScan 1.5s linear infinite;
+        }
+
+        @keyframes progressScan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Footer Cyber Style */
+        .footer {
+            border-top: 2px solid #00ffff;
+            background: rgba(10, 12, 15, 0.95) !important;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            animation: footerPulse 4s infinite;
+        }
+
+        @keyframes footerPulse {
+            0%, 100% { border-top-color: #00ffff; }
+            50% { border-top-color: #ff00ff; }
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                #00ffff, 
+                #ff00ff, 
+                #00ffff, 
+                transparent);
+            animation: footerScan 3s linear infinite;
+        }
+
+        @keyframes footerScan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .footer p {
+            color: #00ffff !important;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            animation: textFlicker 5s infinite;
+        }
+
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            94% { opacity: 0.3; }
+            96% { opacity: 1; }
+            98% { opacity: 0.3; }
+        }
+
+        /* Form Controls Cyber Style */
+        .form-control, .form-select {
+            background: rgba(0, 0, 0, 0.5) !important;
+            border: 1px solid #00ffff !important;
+            color: #00ffff !important;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3) !important;
+            border-color: #ff00ff !important;
+            transform: scale(1.02);
+        }
+
+        .form-control::placeholder {
+            color: rgba(0, 255, 255, 0.3);
+        }
+
+        /* Input Group Cyber Style */
+        .input-group-text {
+            background: rgba(0, 0, 0, 0.7) !important;
+            border: 1px solid #00ffff !important;
+            color: #00ffff !important;
+        }
+
+        /* Loading Spinner */
+        .cyber-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top-color: #00ffff;
+            border-right-color: #ff00ff;
+            border-radius: 50%;
+            animation: cyberSpin 1s linear infinite;
+        }
+
+        @keyframes cyberSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            
+            .cyber-orb {
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Background Elements -->
+    <div class="scan-line"></div>
+    <div class="cyber-orb orb-1"></div>
+    <div class="cyber-orb orb-2"></div>
+    <div class="cyber-orb orb-3"></div>
+    <canvas class="digital-rain" id="digitalRain"></canvas>
+
+    <!-- Original Navbar - Exactly same structure -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
+                <i class="bi bi-shield-lock-fill text-primary me-2"></i>SafeLink Checker
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary btn-sm ms-lg-3 mt-2 mt-lg-0" href="{{ url_for('register') }}">Get Started</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Original Main Content -->
+    <main style="margin-top: 80px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Original Footer -->
+    <footer class="footer mt-5">
+        <div class="container text-center">
+            <p class="text-secondary">&copy; 2024 SafeLink Checker Phishing Detection. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Original Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Digital Rain Animation -->
+    <script>
+        const canvas = document.getElementById('digitalRain');
+        if(canvas) {
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const charsArray = chars.split("");
+            
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+
+            const drops = [];
+            for(let x = 0; x < columns; x++) {
+                drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
+            }
+
+            function drawRain() {
+                ctx.fillStyle = 'rgba(10, 12, 15, 0.03)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for(let i = 0; i < drops.length; i++) {
+                    const text = charsArray[Math.floor(Math.random() * charsArray.length)];
+                    
+                    // Random colors for cyber effect
+                    const colors = ['#00ffff', '#0d6efd', '#ff00ff', '#0dcaf0'];
+                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    ctx.font = fontSize + 'px monospace';
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(drawRain, 50);
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Auto-dismiss alerts with cyber effect
+        document.querySelectorAll('.alert').forEach(alert => {
+            setTimeout(() => {
+                alert.style.transition = 'all 0.5s';
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateX(100px)';
+                setTimeout(() => {
+                    if(alert.parentNode) {
+                        alert.style.display = 'none';
+                    }
+                }, 500);
+            }, 4000);
+        });
+
+        // Random glitch effect on cards
+        setInterval(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                if(Math.random() < 0.03) {
+                    card.style.transform = `skew(${Math.random() * 3 - 1.5}deg) scale(1.02)`;
+                    card.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+                    setTimeout(() => {
+                        card.style.transform = '';
+                        card.style.filter = '';
+                    }, 150);
+                }
+            });
+        }, 2000);
+
+        // Mouse move parallax effect on orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.cyber-orb');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

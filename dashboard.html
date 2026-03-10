@@ -1,0 +1,1026 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Section with Cyber Glitch -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="welcome-section">
+                <h1 class="cyber-glitch" data-text="WELCOME BACK">WELCOME BACK, <span class="neon-text">{{ current_user.username }}</span></h1>
+                <div class="status-badge">
+                    <span class="pulse-dot"></span>
+                    <span>SYSTEM ONLINE • PROTECTION ACTIVE</span>
+                </div>
+            </div>
+            <p class="text-secondary scan-quote">"Your security is our priority. Here's your protection status."</p>
+        </div>
+    </div>
+
+    <!-- Animated Summary Stats -->
+    <div class="stats-grid">
+        <div class="cyber-stat-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Total Scans</span>
+                <span class="stat-value count-up" data-target="124">0</span>
+            </div>
+            <div class="stat-trend positive">
+                <i class="bi bi-arrow-up"></i> +12% this week
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="cyber-stat-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Safe Results</span>
+                <span class="stat-value count-up" data-target="89">0</span>
+            </div>
+            <div class="stat-trend positive">
+                <i class="bi bi-shield-check"></i> 71.8% safe rate
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="cyber-stat-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Threats Found</span>
+                <span class="stat-value count-up text-danger" data-target="35">0</span>
+            </div>
+            <div class="stat-trend negative">
+                <i class="bi bi-shield-x"></i> 28.2% threat rate
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+
+        <div class="cyber-stat-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Last Scan</span>
+                <span class="stat-value">2h ago</span>
+            </div>
+            <div class="stat-trend">
+                <i class="bi bi-check-circle-fill text-success"></i> System active
+            </div>
+            <div class="stat-glow"></div>
+        </div>
+    </div>
+
+    <!-- Quick Scan Actions with Cyber Cards -->
+    <div class="section-header">
+        <h3 class="section-title">⚡ QUICK SCAN ACTIONS</h3>
+        <div class="title-line"></div>
+    </div>
+
+    <div class="scan-actions-grid">
+        <a href="{{ url_for('scan_url_route') }}" class="scan-action-card" data-aos="flip-left" data-aos-delay="100">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+                <i class="bi bi-link-45deg"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h4>URL Scan</h4>
+            <p>Analyze URLs for phishing</p>
+            <div class="action-footer">
+                <span class="action-stats">1.2M+ scanned</span>
+                <span class="action-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('scan_ip_route') }}" class="scan-action-card" data-aos="flip-left" data-aos-delay="200">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+                <i class="bi bi-globe"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h4>IP Analysis</h4>
+            <p>Check IP reputation</p>
+            <div class="action-footer">
+                <span class="action-stats">847K+ analyzed</span>
+                <span class="action-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('scan_file_route') }}" class="scan-action-card" data-aos="flip-left" data-aos-delay="300">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+                <i class="bi bi-file-earmark-code"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h4>File Scan</h4>
+            <p>Detect malware in files</p>
+            <div class="action-footer">
+                <span class="action-stats">500K+ scanned</span>
+                <span class="action-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('scan_hash_route') }}" class="scan-action-card" data-aos="flip-left" data-aos-delay="400">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+                <i class="bi bi-hash"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h4>Hash Check</h4>
+            <p>Verify file hashes</p>
+            <div class="action-footer">
+                <span class="action-stats">2M+ hashes</span>
+                <span class="action-arrow"><i class="bi bi-arrow-right"></i></span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Analytics and Recent Activity -->
+    <div class="row g-4">
+        <!-- Chart Section with Cyber Style -->
+        <div class="col-lg-8">
+            <div class="cyber-chart-card" data-aos="fade-right">
+                <div class="card-header">
+                    <div class="header-left">
+                        <i class="bi bi-graph-up"></i>
+                        <h4>Scan Activity Overview</h4>
+                    </div>
+                    <div class="header-right">
+                        <span class="time-filter active">Week</span>
+                        <span class="time-filter">Month</span>
+                        <span class="time-filter">Year</span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="scanChart"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="chart-stat">
+                        <span class="stat-dot" style="background: #00ffff;"></span>
+                        <span>Total Scans: 124</span>
+                    </div>
+                    <div class="chart-stat">
+                        <span class="stat-dot" style="background: #ff00ff;"></span>
+                        <span>Peak Day: Day 3 (19 scans)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Scans with Cyber Style -->
+        <div class="col-lg-4">
+            <div class="cyber-recent-card" data-aos="fade-left">
+                <div class="card-header">
+                    <i class="bi bi-clock"></i>
+                    <h4>Recent Activity</h4>
+                    <span class="badge cyber-badge">LIVE</span>
+                </div>
+                <div class="recent-scans-list">
+                    {% if recent_scans %}
+                        {% for scan in recent_scans %}
+                        <div class="scan-item" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                            <div class="scan-icon">
+                                {% if scan.scan_type == 'url' %}
+                                    <i class="bi bi-link-45deg"></i>
+                                {% elif scan.scan_type == 'ip' %}
+                                    <i class="bi bi-globe"></i>
+                                {% elif scan.scan_type == 'file' %}
+                                    <i class="bi bi-file-earmark-code"></i>
+                                {% else %}
+                                    <i class="bi bi-hash"></i>
+                                {% endif %}
+                            </div>
+                            <div class="scan-details">
+                                <div class="scan-target">{{ scan.input_value | truncate(25) }}</div>
+                                <div class="scan-meta">
+                                    <span class="scan-time">{{ scan.scanned_at.strftime('%H:%M:%S') }}</span>
+                                    <span class="scan-type">{{ scan.scan_type.upper() }}</span>
+                                </div>
+                            </div>
+                            <div class="scan-result">
+                                {% if scan.result == 'phishing' %}
+                                <span class="result-badge danger">
+                                    <i class="bi bi-exclamation-triangle"></i> THREAT
+                                </span>
+                                {% elif scan.result == 'safe' %}
+                                <span class="result-badge success">
+                                    <i class="bi bi-check-circle"></i> SAFE
+                                </span>
+                                {% else %}
+                                <span class="result-badge warning">
+                                    <i class="bi bi-question-circle"></i> UNKNOWN
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-inbox"></i>
+                            <p>No recent scans found</p>
+                            <a href="{{ url_for('scan_url_route') }}" class="btn-cyber-small">Start your first scan</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('scan_history') }}" class="view-all-link">
+                        View All History <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Threat Intelligence Section -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="cyber-threat-card" data-aos="fade-up">
+                <div class="card-header">
+                    <div class="header-left">
+                        <i class="bi bi-shield-fill-exclamation"></i>
+                        <h4>Live Threat Intelligence</h4>
+                    </div>
+                    <div class="live-indicator">
+                        <span class="pulse-dot"></span>
+                        <span>UPDATING IN REAL-TIME</span>
+                    </div>
+                </div>
+                <div class="threat-grid">
+                    <div class="threat-item">
+                        <div class="threat-icon">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <div class="threat-info">
+                            <span class="threat-label">Malicious IPs Blocked</span>
+                            <span class="threat-value count-up" data-target="1247">0</span>
+                        </div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-icon">
+                            <i class="bi bi-link"></i>
+                        </div>
+                        <div class="threat-info">
+                            <span class="threat-label">Phishing URLs Detected</span>
+                            <span class="threat-value count-up" data-target="892">0</span>
+                        </div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-icon">
+                            <i class="bi bi-file-earmark-binary"></i>
+                        </div>
+                        <div class="threat-info">
+                            <span class="threat-label">Malware Samples</span>
+                            <span class="threat-value count-up" data-target="2341">0</span>
+                        </div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div class="threat-info">
+                            <span class="threat-label">Protected Endpoints</span>
+                            <span class="threat-value count-up" data-target="50000">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts and Styles -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+/* ===== DASHBOARD CYBER STYLES ===== */
+
+/* Welcome Section */
+.welcome-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.cyber-glitch {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    animation: glitchSkew 4s infinite;
+}
+
+.cyber-glitch::before,
+.cyber-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.cyber-glitch::before {
+    color: #ff00ff;
+    z-index: -1;
+    animation: glitchOffset 0.3s infinite;
+}
+
+.cyber-glitch::after {
+    color: #00ffff;
+    z-index: -2;
+    animation: glitchOffset 0.3s infinite reverse;
+}
+
+@keyframes glitchSkew {
+    0%, 100% { transform: skew(0deg); }
+    92% { transform: skew(2deg); }
+    94% { transform: skew(-2deg); }
+    96% { transform: skew(1deg); }
+    98% { transform: skew(-1deg); }
+}
+
+@keyframes glitchOffset {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(2px, 2px); }
+    100% { transform: translate(0); }
+}
+
+.neon-text {
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    border-radius: 30px;
+    color: #00ffff;
+    font-size: 0.8rem;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff00;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.scan-quote {
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.cyber-stat-card {
+    position: relative;
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.cyber-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #00ffff;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.stat-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: rgba(0, 255, 255, 0.2);
+    transition: all 0.3s;
+}
+
+.cyber-stat-card:hover .stat-icon {
+    color: rgba(0, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.stat-content {
+    position: relative;
+    z-index: 2;
+}
+
+.stat-label {
+    display: block;
+    color: #888;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+
+.stat-trend {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.stat-trend.positive {
+    color: #00ff00;
+}
+
+.stat-trend.negative {
+    color: #ff00ff;
+}
+
+.stat-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.cyber-stat-card:hover .stat-glow {
+    opacity: 1;
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #00ffff;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.title-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #00ffff, transparent);
+}
+
+/* Scan Actions Grid */
+.scan-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.scan-action-card {
+    position: relative;
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 2rem 1.5rem;
+    text-decoration: none;
+    color: #fff;
+    overflow: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.scan-action-card:hover {
+    transform: translateY(-10px);
+    border-color: #00ffff;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+}
+
+.card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.scan-action-card:hover .card-glow {
+    opacity: 1;
+}
+
+.card-icon {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon i {
+    font-size: 2.5rem;
+    color: #00ffff;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    z-index: 2;
+}
+
+.icon-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00ffff;
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.scan-action-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.scan-action-card p {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.action-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.action-stats {
+    color: #00ffff;
+    font-size: 0.8rem;
+}
+
+.action-arrow {
+    color: #00ffff;
+    transition: transform 0.3s;
+}
+
+.scan-action-card:hover .action-arrow {
+    transform: translateX(10px);
+}
+
+/* Chart Card */
+.cyber-chart-card {
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.header-left i {
+    color: #00ffff;
+    font-size: 1.5rem;
+}
+
+.header-left h4 {
+    color: #fff;
+    margin: 0;
+}
+
+.time-filter {
+    color: #888;
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+    transition: all 0.3s;
+}
+
+.time-filter.active {
+    color: #00ffff;
+    border: 1px solid #00ffff;
+}
+
+.time-filter:hover {
+    color: #00ffff;
+}
+
+.chart-container {
+    height: 300px;
+    margin-bottom: 1rem;
+}
+
+.chart-stats {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.chart-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #888;
+}
+
+.stat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* Recent Activity Card */
+.cyber-recent-card {
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    height: 100%;
+}
+
+.cyber-badge {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    margin-left: auto;
+}
+
+.recent-scans-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 1rem 0;
+}
+
+.scan-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    transition: all 0.3s;
+}
+
+.scan-item:hover {
+    background: rgba(0, 255, 255, 0.05);
+    transform: translateX(5px);
+}
+
+.scan-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+}
+
+.scan-icon i {
+    color: #00ffff;
+}
+
+.scan-details {
+    flex: 1;
+}
+
+.scan-target {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.2rem;
+}
+
+.scan-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.7rem;
+    color: #888;
+}
+
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+.result-badge.danger {
+    background: rgba(255, 0, 255, 0.1);
+    color: #ff00ff;
+    border: 1px solid #ff00ff;
+}
+
+.result-badge.success {
+    background: rgba(0, 255, 0, 0.1);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+.result-badge.warning {
+    background: rgba(255, 255, 0, 0.1);
+    color: #ffff00;
+    border: 1px solid #ffff00;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: rgba(0, 255, 255, 0.3);
+    margin-bottom: 1rem;
+}
+
+.btn-cyber-small {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-cyber-small:hover {
+    background: #00ffff;
+    color: #0a0c0f;
+}
+
+.view-all-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #00ffff;
+    text-decoration: none;
+    padding: 1rem 0 0;
+    transition: all 0.3s;
+}
+
+.view-all-link:hover {
+    gap: 1rem;
+}
+
+/* Threat Intelligence Card */
+.cyber-threat-card {
+    background: rgba(20, 25, 35, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #00ff00;
+    font-size: 0.8rem;
+}
+
+.threat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.threat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    transition: all 0.3s;
+}
+
+.threat-item:hover {
+    border-color: #00ffff;
+    transform: translateX(5px);
+}
+
+.threat-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.threat-icon i {
+    font-size: 1.5rem;
+    color: #00ffff;
+}
+
+.threat-info {
+    flex: 1;
+}
+
+.threat-label {
+    display: block;
+    color: #888;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.threat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stats-grid,
+    .scan-actions-grid,
+    .threat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .cyber-glitch {
+        font-size: 1.5rem;
+    }
+    
+    .stats-grid,
+    .scan-actions-grid,
+    .threat-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+</style>
+
+<script>
+// Initialize AOS
+AOS.init({
+    duration: 800,
+    once: true
+});
+
+// Chart Configuration
+const ctx = document.getElementById('scanChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+            label: 'Scans',
+            data: [12, 19, 3, 5, 2, 3, 10],
+            borderColor: '#00ffff',
+            backgroundColor: 'rgba(0, 255, 255, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#00ffff',
+            pointBorderColor: '#fff',
+            pointRadius: 5,
+            pointHoverRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#0a0c0f',
+                titleColor: '#00ffff',
+                bodyColor: '#fff',
+                borderColor: '#00ffff',
+                borderWidth: 1
+            }
+        },
+        scales: {
+            y: { 
+                grid: { color: 'rgba(0, 255, 255, 0.1)' }, 
+                ticks: { color: '#888' }
+            },
+            x: { 
+                grid: { color: 'rgba(0, 255, 255, 0.1)' }, 
+                ticks: { color: '#888' }
+            }
+        }
+    }
+});
+
+// Counter Animation
+function animateCounters() {
+    const counters = document.querySelectorAll('.count-up');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const increment = target / 50; // Divide by number of steps
+        
+        let current = 0;
+        const updateCounter = () => {
+            current += increment;
+            if(current < target) {
+                counter.innerText = Math.ceil(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.innerText = target.toLocaleString();
+            }
+        };
+        
+        // Start counter when element is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    updateCounter();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(counter);
+    });
+}
+
+// Time filter interaction
+document.querySelectorAll('.time-filter').forEach(filter => {
+    filter.addEventListener('click', function() {
+        document.querySelectorAll('.time-filter').forEach(f => f.classList.remove('active'));
+        this.classList.add('active');
+        // Here you would update the chart data based on time range
+    });
+});
+
+// Start animations when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    animateCounters();
+});
+</script>
+{% endblock %}
